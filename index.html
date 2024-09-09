@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Start Quiz</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="start-button">Start Quiz</button>
+
+    <script>
+        document.getElementById('start-button').onclick = async () => {
+            try {
+                const response = await fetch('/start-quiz', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    console.log('StartQuiz command sent to server');
+                } else {
+                    console.error('Failed to send StartQuiz command');
+                }
+            } catch (error) {
+                console.error('Error sending StartQuiz command:', error);
+            }
+        };
+    </script>
+</body>
+</html>
