@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5c6e2e95bdcbe4c8507606abd9a5fb, type: 3}
   m_Name: WebConfig
   m_EditorClassIdentifier: 
-  webSocketUrl: ws://127.0.0.1:8000/ws
+  webSocketUrl: ws://web-quiz-74206dd8d0ce.herokuapp.com/ws
   webRequestUrl: http://127.0.0.1:8000/

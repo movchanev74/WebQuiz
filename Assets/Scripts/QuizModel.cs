@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using Zenject;
 
 [Serializable]
-public struct QuizData
+public struct StepData
 {
-    public string rightAnswer;
-    public string wrongAnswer;
+    public string headerText;
+    public List<QuestionData> questions;
+}
+
+[Serializable]
+public struct QuestionData
+{
+    public string questionText;
+    public int rightAnswer;
 }
 
 public class QuizModel
 {
-    [Inject]
-    private readonly WebSocketService _webSocketService;
+    public List<StepData> quizes;
 
-    public List<QuizData> quizes;
-
-    public QuizModel()
+    public QuizModel(DiContainer diContainer)
     {
-        //_viewManager.Show<QuizStepOnePresenter>();
-        quizes = new List<QuizData>()
+        var quizesMockConfig = diContainer.TryResolve<QuizesMockConfig>();
+        if(quizesMockConfig)
         {
-            new QuizData()
-            {
-                rightAnswer = "rightAnswer",
-                wrongAnswer = "wrongAnswer",
-            }
-        };
+            quizes = quizesMockConfig.quizes;
+        }
     }
 }

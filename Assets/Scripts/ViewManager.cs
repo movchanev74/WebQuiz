@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +10,11 @@ public interface IUIView
 {
     UniTask Show();
     UniTask Hide();
+}
+
+public interface IUIInfo
+{
+    void SetStepInfo(string stepInfo);
 }
 
 public interface IPresenter
@@ -24,10 +29,9 @@ public class ViewManager
 
     List<IPresenter> screenPresenters = new List<IPresenter>();
 
-    public void Show<T>(Action<T> afterShowCallback = null) where T : class, IPresenter
+    public void Show<T>() where T : class, IPresenter
     {
         var presenter = _di.TryResolve<T>();
-        
         if (presenter == null)
         {
             return;
@@ -39,13 +43,28 @@ public class ViewManager
         }
         HideAll();
 
-        if (afterShowCallback == null)
-            presenter.Show().Forget();
-        else
-            presenter.Show().ContinueWith(() => afterShowCallback(presenter)).Forget();
+        presenter.Show().Forget();
     }
 
-    public void Hide<T>(Action<T> afterHideCallback = null) where T : class, IPresenter
+    public void Show(Type type)
+    {
+        var presenter = (IPresenter)_di.TryResolve(type);
+        if (presenter == null)
+        {
+            Debug.LogError($"[UI] Presenter {type.Name}: Unable to resolve");
+            return;
+        }
+
+        if (!screenPresenters.Contains(presenter))
+        {
+            screenPresenters.Add(presenter);
+        }
+        HideAll();
+
+        presenter.Show().Forget();
+    }
+
+    public void Hide<T>() where T : class, IPresenter
     {
         var presenter = _di.TryResolve<T>();
         if (presenter == null)
@@ -54,10 +73,7 @@ public class ViewManager
             return;
         }
 
-        if (afterHideCallback == null)
-            presenter.Show().Forget();
-        else
-            presenter.Show().ContinueWith(() => afterHideCallback(presenter)).Forget();
+        presenter.Hide().Forget();
     }
 
     private void HideAll()

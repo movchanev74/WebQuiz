@@ -7,7 +7,6 @@ public class Boot
 {
     public Boot(ViewManager viewManager)
     {
-        viewManager.Show<MainScreenPresenter>();
-        //webSocketService.Connect();
+        viewManager.Show<StartScreenPresenter>();
     }
 }
